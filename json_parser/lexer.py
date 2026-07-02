@@ -12,11 +12,11 @@ class Lexer:
 
         result = ""
 
-        while self.position < len(self.text) and self.text[self.position] != "'":
+        while self.position < len(self.text) and self.text[self.position] != '"':
             result += self.text[self.position]
             self.position += 1
         
-        if self.position > len(self.text):
+        if self.position >= len(self.text):
             raise Exception("undetermined String")
         
         return result
@@ -53,15 +53,19 @@ class Lexer:
                 tokens.append(Token(TokenType.COMMA, current_char))
             elif current_char == '"':
                 string_value = self.read_string()
-                tokens.append(Token(TokenType.STRING, current_char))
+                tokens.append(Token(TokenType.STRING, string_value))
             elif current_char.isalpha():
                 word = self.read_word()
 
-                if word == "True":
+                if word == "true":
                     tokens.append(Token(TokenType.TRUE, True))
-                elif word == "False":
-                    tokens.append
-            elif current_char == "\n\t\r":
+                elif word == "false":
+                    tokens.append(Token(TokenType.FALSE, False))
+                elif word == "null":
+                    tokens.append(Token(TokenType.NULL, None))
+                else:
+                    raise Exception(f"unknown char:  {word}")
+            elif current_char in " \n\t\r":
                 pass
             else:
                 raise Exception(f"unknown char : {current_char}")

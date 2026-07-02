@@ -23,12 +23,23 @@ class Lexer:
 
     def read_word(self):
         result = ""
+        # why we are using self.position < len(self.text) ? it's more like a safety check
         while self.position < len(self.text) and self.text[self.position].isalpha():
+            result += self.text[self.position]
+            self.position += 1
+            
+        # "suppose at the end of the we get at "true" at the end of the "true" we have "," which is not isalpha
+        self.position -= 1
+        return result
+
+    def read_number(self):
+        result = ""
+        while self.position < len(self.text) and self.text[self.position].isdigit():
             result += self.text[self.position]
             self.position += 1
         
         self.position -= 1
-        return result
+        return int(result)
         
 
     
@@ -65,6 +76,11 @@ class Lexer:
                     tokens.append(Token(TokenType.NULL, None))
                 else:
                     raise Exception(f"unknown char:  {word}")
+            
+            elif current_char.isdigit():
+                number = self.read_number()
+                tokens.append(Token(TokenType.NUMBER, number))
+
             elif current_char in " \n\t\r":
                 pass
             else:

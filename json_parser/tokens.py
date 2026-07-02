@@ -10,6 +10,7 @@ class TokenType(Enum):
     COMMA = ","
     EOF = "EOF"
     STRING = "STRING"
+    NUMBER = "NUMBER"
     TRUE = "TRUE"
     FALSE = "FALSE"
     NULL = "NULL"
